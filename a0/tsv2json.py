@@ -1,25 +1,34 @@
 
 # coding: utf-8
 
-# In[6]:
+# In[1]:
 
-import json
+import json, collections
 
 
-# In[11]:
+# In[2]:
 
-d = []
+s = []
 with open("cmudict.tsv") as f:
-        for line in f:
-            an = line.strip('\n').split('\t')
-            # strips the newline character from the end of each line
-            d.append({'word': an[0], 'pronunciations': (an[2]).split(' ')})
-            # first pronoun is whitespace so instead of an[1:], an[2:] was used
+    for line in f:
+        an = line.strip('\n').split('\t')
+        #strips the newline character
+        s.append((an[0], (an[2]).split(' ')))
+        #an[1] is white space
 
 
 # In[3]:
 
-### found on https://www.safaribooksonline.com/library/view/python-cookbook-3rd/9781449357337/ch06s02.html 
-with open('cmudict.json', 'w') as f:
-     json.dump(d, f)
+d = collections.defaultdict(list)
+for k, v in s:
+    d[k].append(v)
+
+
+# In[4]:
+
+for k, v in d.items():
+    data = {"word": k, "pronunciations": v}
+    with open('cmudict.json', 'a') as outfile:
+        json.dump(data, outfile)
+        outfile.write('\n')
 
