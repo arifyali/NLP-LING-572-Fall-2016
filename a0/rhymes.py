@@ -38,15 +38,15 @@ def pronunciations(word):
 
     >>> pronunciations("DOG")
     [['D', 'AO1', 'G']]
-
+    
     >>> pronunciations("ZYWICKI")
     [['Z', 'IH0', 'W', 'IH1', 'K', 'IY0']]
-
+    
     >>> pronunciations("dog")
-
+    
     """
     #word = word.upper()
-
+    
     try:
         match = CMUDICT[word]
     except KeyError:
@@ -62,10 +62,10 @@ def pronunciations(word):
 def ipa_vowels(string):
     # used the wikipedia article https://en.wikipedia.org/wiki/Arpabet
     # and http://www.phon.ucl.ac.uk/home/wells/ipa-unicode.htm to make dict
-    ipa_dict = {'AXR' : '\u025A', 'EH R' : '\u025Br', 'UH R' : '\u028Ar',
+    ipa_dict = {'AXR' : '\u025A', 'EH R' : '\u025Br', 'UH R' : '\u028Ar', 
                 'AO R' : '\u0254r', 'AA R' : '\u0251r', 'IY R' : '\u026Ar',
                 'IH R' : '\u026Ar', 'AW R' : 'a\u028Ar',
-                'AA': '\u0251', 'AO': '\u0254', 'IY': 'i', 'UW': 'u',
+                'AA': '\u0251', 'AO': '\u0254', 'IY': 'i', 'UW': 'u', 
                'EH': '\u025B', 'IH': '\u026A', 'UH': '\u028A', 'AH1': '\u028C',
                'AH0': '\u0259', 'AX': '\u0259', 'AE': '\u00E6', 'EY': 'e\u026A',
                'AY': 'a\u026A', 'OW': 'o\u028A', 'AW': 'a\u028A', 'OY' : '\u0254\u026A',
@@ -73,7 +73,7 @@ def ipa_vowels(string):
     for ipa in ipa_dict.keys():
         string = string.replace(ipa, ipa_dict[ipa])
     return(string)
-
+    
 
 
 # In[18]:
@@ -90,30 +90,33 @@ def rhyming_words(word, flag = 0):
 
     >>> 'GREW' in rhyming_words('GREW')
     True
-
+    
     >>> 'DOG' in rhyming_words('FOG')
     True
-
+    
     >>> 'DOG' in rhyming_words('CAT')
     False
-
+    
     """
     rhyme_match = []
     word_pronunciation = pronunciations(word)
-
+    
     for possible_match in CMUDICT.keys(): # This goes through every word in CMUDICT
         pmpron = pronunciations(possible_match) #pronunciations for each word
         for pron in pmpron: # if a word has multiple spellings
             for i in word_pronunciation: # the word supplied, this for loop checks the multiple pronunciations case
                 rhyme_check = i[-1]
-                if pron[-1] == rhyme_check: #logic is that if the last syl matches for the target word and the candidate, the candidate is a rhyming word
-                    if flag == 0: #determines if output is list of words or not
+                if pron[-1] == rhyme_check:
+                    if flag == 0:
                         rhyme_match.append(possible_match)
-                    else:
+                    else: 
                         pron_string = ' '.join(pron)
                         print(ipa_vowels(pron_string))
-
+                        
+    # if(len(rhyme_match)>1):
     return(rhyme_match)
+    # else:
+    #    sys.stderr.write("Query word not found")
     pass
 
 
@@ -123,16 +126,16 @@ if __name__=='__main__':
     load_dict()
 
     doctest.testmod()   # run doctests
-
+    
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", help="output pronunciations, not words",
                         action="store_true")
     parser.add_argument("q", type=str)
 
     args = parser.parse_args()
-
+    
     query = (args.q).upper()
-
+    
     if query not in CMUDICT:
         sys.stderr.write("Query word not found")
     else:
