@@ -30,9 +30,10 @@ def load_docs(direc, lemmatize, labelMapFile='labels.csv'):
     docs, labels = [], []
     for file_path in glob.glob(os.path.join(direc, '*.txt')):
         filename = os.path.basename(file_path)
-        # open the file at file_path, construct a list of its word tokens,
-        # and append that list to 'docs'.
-        # look up the document's label and append it to 'labels'.
+        labels.append(labelMap[filename])
+        with open('file_path') as f:
+            docs.append(f.read().split())
+        # credit: http://stackoverflow.com/questions/13259288/returning-a-list-of-words-after-reading-a-file-in-python
         ...
 
     return docs, labels
