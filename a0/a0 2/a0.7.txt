@@ -1,4 +1,0 @@
-For OOV words, I would do a search on the following string [^aeiouAEIOU]?[aeiouAEIOU]*[^aeiouAEIOU]*$ and search it against known words. 
-This follows the basic definition of what rhymes from wikipedia, "A rhyme is a repetition of similar sounds (or the same sound) in two or more words, most often in the final syllables of lines in poems and songs." ("Rhyme". Oxford Dictionaries. Oxford University Press. 2013.). 
-From the definition of a syllable, "A syllable is typically made up of a syllable nucleus (most often a vowel) with optional initial and final margins (typically, consonants)." (https://en.wikipedia.org/wiki/Syllable)
-The regex expression thus looks for that pattern. For NOTHINGBURGER, it should look up words ending in GER, and for CRONUT, it should find words ending in NUT and even just NUT.
