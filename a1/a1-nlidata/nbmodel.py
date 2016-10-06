@@ -109,7 +109,7 @@ class NaiveBayes:
         # prior * likelihood probability of the test document
         # should not make any changes to the model parameters
         print(max_class)
-	return max_class
+        return max_class
 
 
     def eval(self, test_docs, test_labels):
