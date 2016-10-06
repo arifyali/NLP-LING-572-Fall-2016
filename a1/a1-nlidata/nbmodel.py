@@ -108,7 +108,9 @@ class NaiveBayes:
         # apply Bayes' rule: return the class that maximizes the
         # prior * likelihood probability of the test document
         # should not make any changes to the model parameters
-        return max_class
+        print(max_class)
+	return max_class
+
 
     def eval(self, test_docs, test_labels):
         """Evaluates performance on the given evaluation data."""
