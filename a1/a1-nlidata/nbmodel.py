@@ -31,7 +31,7 @@ def load_docs(direc, lemmatize, labelMapFile='labels.csv'):
     for file_path in glob.glob(os.path.join(direc, '*.txt')):
         filename = os.path.basename(file_path)
         labels.append(labelMap[filename])
-        with open('file_path') as f:
+        with open(file_path) as f:
             docs.append(f.read().split())
             #if lemmatize:
             #    for word in range(0,doc):
@@ -64,10 +64,11 @@ class NaiveBayes:
 
         for i in range(0, len(labels)):
         # count(y) in labelCounts
+            l = labels[i]
             labelCounts[labels[i]] +=1
             # count(y,w) for all words in totalWordCounts
             totalWordCounts[labels[i]] += len(docs[i])
-            words = doc[i]
+            words = docs[i]
             # count(y,word) in wordCounts,
             for word in words:
                 wordCounts[labels[i]][word] += 1
@@ -76,8 +77,8 @@ class NaiveBayes:
         # compute and store prior distribution over classes
         # (unsmoothed) in self.priorProbs
             for word in self.trainVocab: 
-                self.likelihoodProbs[l][word] = np.divide(wordCounts[l][word]+ALPHA, totalWordCounts[l]+ALPHA*(len(self.trainVocab)+1))
-            self.likelihoodProbs[l]['**OOV**'] = np.divide(ALPHA, totalWordCounts[l]+ALPHA*(len(self.trainVocab)+1))
+                self.likelihoodProbs[l][word] = np.divide(wordCounts[l][word]+self.ALPHA, totalWordCounts[l]+self.ALPHA*(len(self.trainVocab)+1))
+            self.likelihoodProbs[l]['**OOV**'] = np.divide(self.ALPHA, totalWordCounts[l]+self.ALPHA*(len(self.trainVocab)+1))
 
         # Sanity checks--do not modify
         assert len(self.priorProbs)==len(self.likelihoodProbs)==len(self.CLASSES)>2
@@ -97,18 +98,17 @@ class NaiveBayes:
         return joint
 
     def predict(self, doc):
-        max_class = 0
+        max_joint = 0
+        max_class = 'unclassified'
         for l in self.CLASSES:
             joint_prob = self.joint_prob(doc, l)
-            if joint_prob>max_class:
-                max_class = max_class
-                break
-            else:
-                continue
+            if joint_prob>max_joint:
+                max_joint = joint_prob
+                max_class = l
         # apply Bayes' rule: return the class that maximizes the
         # prior * likelihood probability of the test document
         # should not make any changes to the model parameters
-        return l
+        return max_class
 
     def eval(self, test_docs, test_labels):
         """Evaluates performance on the given evaluation data."""
