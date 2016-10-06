@@ -33,11 +33,12 @@ def load_docs(direc, lemmatize, labelMapFile='labels.csv'):
         labels.append(labelMap[filename])
         with open(file_path) as f:
             docs.append(f.read().split())
-            #if lemmatize:
-            #    for word in range(0,doc):
-
         # credit: http://stackoverflow.com/questions/13259288/returning-a-list-of-words-after-reading-a-file-in-python
-        ...
+
+        if lemmatize:
+            lemma = WordNetLemmatizer()
+            docs = list(map(lambda x: lemma.lemmatize(x), docs))
+
 
     return docs, labels
 
@@ -55,13 +56,11 @@ class NaiveBayes:
     def learn(self, docs, labels, alpha=1.0):
         """Estimate parameters for a naive Bayes bag-of-words model with the
         given training data and amount of add-alpha smoothing."""
-
         assert len(docs)==len(labels)
         labelCounts = {l: 0 for l in self.CLASSES}
         wordCounts = {l: Counter() for l in self.CLASSES}
         totalWordCounts = {l: 0 for l in self.CLASSES}
         # iterate over documents in order to record
-
         for i in range(0, len(labels)):
         # count(y) in labelCounts
             l = labels[i]
@@ -70,16 +69,19 @@ class NaiveBayes:
             totalWordCounts[labels[i]] += len(docs[i])
             words = docs[i]
             # count(y,word) in wordCounts,
+            
             for word in words:
                 wordCounts[labels[i]][word] += 1
                 # and to store the training vocabulary in self.trainVocab
                 self.trainVocab.add(word)
         # compute and store prior distribution over classes
         # (unsmoothed) in self.priorProbs
+        
+        for l in self.priorProbs:
+            self.priorProbs[l] = np.divide(labelCounts[l], len(labels))
             for word in self.trainVocab: 
                 self.likelihoodProbs[l][word] = np.divide(wordCounts[l][word]+self.ALPHA, totalWordCounts[l]+self.ALPHA*(len(self.trainVocab)+1))
             self.likelihoodProbs[l]['**OOV**'] = np.divide(self.ALPHA, totalWordCounts[l]+self.ALPHA*(len(self.trainVocab)+1))
-
         # Sanity checks--do not modify
         assert len(self.priorProbs)==len(self.likelihoodProbs)==len(self.CLASSES)>2
         assert .999 < sum(self.priorProbs.values()) < 1.001
@@ -89,26 +91,28 @@ class NaiveBayes:
 
     def joint_prob(self, doc, y):
         joint = log(self.priorProbs[y])
+        
         # compute the log of the joint probability of the document and the class,
         # i.e., return p(y)*p(w1|y)*p(w2|y)*... (but in log domain)
         for word in doc:
-            joint += log(self.likelihoodProbs[y][word])
+            if self.likelihoodProbs[y][word] == 0:
+                joint += log(self.likelihoodProbs[y]['**OOV**'])
+            else:
+                joint += log(self.likelihoodProbs[y][word])
                 
         # should not make any changes to the model parameters
         return joint
 
     def predict(self, doc):
-        max_joint = 0
-        max_class = 'unclassified'
-        for l in self.CLASSES:
-            joint_prob = self.joint_prob(doc, l)
-            if joint_prob>max_joint:
-                max_joint = joint_prob
-                max_class = l
         # apply Bayes' rule: return the class that maximizes the
         # prior * likelihood probability of the test document
         # should not make any changes to the model parameters
-        print(max_class)
+
+        joints = {l: 0 for l in self.CLASSES}
+        for l in joints:
+            joints[l] = self.joint_prob(doc, l)
+        max_class = max(joints, key=joints.get)
+        # credit: http://stackoverflow.com/questions/268272/getting-key-with-maximum-value-in-dictionary        
         return max_class
 
 
@@ -129,7 +133,7 @@ if __name__ == "__main__":
         lemmatize = True
         args = args[1:]
     alpha = float(args[0])
-
+    print(alpha)
     train_docs, train_labels = load_docs('train', lemmatize)
     print(len(train_docs), 'training docs with',
         sum(len(d) for d in train_docs), 'tokens', file=sys.stderr)
