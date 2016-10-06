@@ -11,7 +11,8 @@ from collections import Counter
 from math import log
 
 from nltk.stem.wordnet import WordNetLemmatizer
-
+import nltk
+nltk.download('wordnet')
 from evaluation import Eval
 
 def load_docs(direc, lemmatize, labelMapFile='labels.csv'):
@@ -34,11 +35,11 @@ def load_docs(direc, lemmatize, labelMapFile='labels.csv'):
         with open(file_path) as f:
             docs.append(f.read().split())
         # credit: http://stackoverflow.com/questions/13259288/returning-a-list-of-words-after-reading-a-file-in-python
-
+       # print("lemma")
         if lemmatize:
-            lemma = WordNetLemmatizer()
-            docs = list(map(lambda x: lemma.lemmatize(x), docs))
-
+            lm = WordNetLemmatizer()
+            docs = [[lm.lemmatize(word) for word in doc] for doc in docs]
+    #print("finish lemma")
 
     return docs, labels
 
