@@ -13,6 +13,7 @@ from math import log
 from nltk.stem.wordnet import WordNetLemmatizer
 import nltk
 nltk.download('wordnet')
+lm = WordNetLemmatizer()
 from evaluation import Eval
 
 def load_docs(direc, lemmatize, labelMapFile='labels.csv'):
