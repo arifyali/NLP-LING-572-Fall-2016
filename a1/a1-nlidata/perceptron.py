@@ -60,15 +60,14 @@ class Perceptron:
         At the end of training, self.weights should contain the final model
         parameters.
         """
-        mistake = False
         for iteration in range(self.MAX_ITERATIONS):
             for i in range(0, len(train_docs)):
                 label = train_labels[i]
                 yhat = self.predict(train_docs[i])
                 if yhat != label:
                     for word in train_docs[i]:
-                        self.weights[label][word] = self.weights[label][word] + train_docs[i][word]
-                        self.weights[yhat][word] = self.weights[yhat][word] - train_docs[i][word]
+                        self.weights[label][word] += train_docs[i][word]
+                        self.weights[yhat][word] -= train_docs[i][word]
             print("iteration: "+ str(iteration) +", train accuracy: "+ str(self.test_eval(train_docs, train_labels)) +", dev accuracy: " + str(self.test_eval(dev_docs, dev_labels)), file=sys.stderr)
 
 
