@@ -25,9 +25,9 @@ def extract_feats(doc):
     A document's percepts are the same regardless of the label considered.
     """
     ff = Counter()
-
-    ...
-
+    for word in doc:
+        ff[word] = 1
+    ff['bias_term'] = 1
     return ff
 
 def load_featurized_docs(datasplit):
@@ -35,7 +35,7 @@ def load_featurized_docs(datasplit):
     assert len(rawdocs)==len(labels)>0,datasplit
     featdocs = []
     for d in rawdocs:
-        featdocs.append(extract_feats(d))
+        featdocs.append( vv(d))
     return featdocs, labels
 
 class Perceptron:
@@ -60,6 +60,27 @@ class Perceptron:
         At the end of training, self.weights should contain the final model
         parameters.
         """
+        mistake = False
+        for inter in self.MAX_ITERATIONS:
+            #if mistake:
+            #    break
+            for i in range(train_docs):
+                label = train_labels[i]
+                weight_inter = {l: 0 for l in self.CLASSES}
+                for l in self.CLASSES:
+                    for word in train_docs[i]:
+                        weight_inter[l] += weights[l][word]*train_docs[i][word]  
+                    yhat = max(weight_inter, key=weight_inter.get)
+                    if yhat == l:
+                        weights[l] = weight_inter[l]
+                    else:
+                        weights[l] = weights[l] + weight_inter[l]-train_docs[i]
+                        #mistake = True
+
+
+                    
+
+
         ...
 
     def score(self, doc, label):
