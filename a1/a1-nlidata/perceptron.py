@@ -61,40 +61,41 @@ class Perceptron:
         parameters.
         """
         mistake = False
-        for inter in self.MAX_ITERATIONS:
+        for inter in range(self.MAX_ITERATIONS):
             #if mistake:
             #    break
-            for i in range(train_docs):
+            for i in range(0, len(train_docs)):
                 label = train_labels[i]
                 weight_inter = {l: 0 for l in self.CLASSES}
-                for l in self.CLASSES:
+                #for l in self.CLASSES:
+                #    for word in train_docs[i]:
+                #        weight_inter[l] += self.weights[l][word]*train_docs[i][word]  
+                yhat = predict(train_docs[i])
+                if yhat != l:
                     for word in train_docs[i]:
-                        weight_inter[l] += weights[l][word]*train_docs[i][word]  
-                    yhat = max(weight_inter, key=weight_inter.get)
-                    if yhat == l:
-                        weights[l] = weight_inter[l]
-                    else:
-                        weights[l] = weights[l] + weight_inter[l]-train_docs[i]
-                        #mistake = True
-
-
-                    
-
-
-        ...
+                        self.weights[l][word] = self.weights[l][word] + train_docs[i][word]
+                        self.weights[yhat][word] = self.weights[yhat][word] - train_docs[i][word]
+                        
 
     def score(self, doc, label):
         """
         Returns the current model's score of labeling the given document
         with the given label.
         """
-        return ...
+        score = 0
+        for word in doc:
+            score += self.weights[l][word]*doc[word]
+        return score
 
     def predict(self, doc):
         """
         Return the highest-scoring label for the document under the current model.
         """
-        return ...
+        scores = {l: 0 for l in self.CLASSES}
+        for l in self.CLASSES:
+            scores[l] += score(doc, l)
+        label_pred = max(scores, key=scores.get)
+        return label_pred
 
     def test_eval(self, test_docs, test_labels):
         pred_labels = [self.predict(d) for d in test_docs]
