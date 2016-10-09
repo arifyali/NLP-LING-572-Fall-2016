@@ -137,7 +137,7 @@ if __name__ == "__main__":
     
     if args[0] == '-n':
         ngram = True
-        n = float(args[1])
+        n = int(args[1])
         args = args[2:]
     niters = int(args[0])
 
