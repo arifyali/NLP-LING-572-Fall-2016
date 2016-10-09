@@ -22,7 +22,7 @@ from evaluation import Eval
 
 from nbmodel import load_docs
 
-def extract_feats(doc, uppercase = False, lemmatize = False, ngram = False, n = 1):
+def extract_feats(doc, uppercase = False, ngram = False, n = 1):
     """
     Extract input features (percepts) for a given document.
     Each percept is a pairing of a name and a boolean, integer, or float value.
@@ -36,18 +36,16 @@ def extract_feats(doc, uppercase = False, lemmatize = False, ngram = False, n = 
         for word in doc:
             if uppercase:
                 word = word.upper()
-            if lemmatize:
-                word = lm.lemmatize(word)
             ff[word] = 1
     ff['bias_term'] = 1
     return ff
 
-def load_featurized_docs(datasplit):
-    rawdocs, labels = load_docs(datasplit, lemmatize=False)
+def load_featurized_docs(datasplit, uppercase = False, lemmatize = False, ngram = False, n = 1):
+    rawdocs, labels = load_docs(datasplit, lemmatize)
     assert len(rawdocs)==len(labels)>0,datasplit
     featdocs = []
     for d in rawdocs:
-        featdocs.append( extract_feats(d))
+        featdocs.append(extract_feats(d, uppercase, ngram, n))
     return featdocs, labels
 
 class Perceptron:
