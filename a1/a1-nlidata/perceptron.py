@@ -60,17 +60,18 @@ class Perceptron:
         At the end of training, self.weights should contain the final model
         parameters.
         """
-        learning_tune = 0.5
+        print("iteration,train_accuracy,dev_accuracy", file=sys.stderr)
         for iteration in range(self.MAX_ITERATIONS):
-            print("iteration: "+ str(iteration) +", train accuracy: "+ str(self.test_eval(train_docs, train_labels)) +", dev accuracy: " + str(self.test_eval(dev_docs, dev_labels)), file=sys.stderr)
-
-            for i in range(0, len(train_docs)):
+            
+            for i in range(len(train_docs)):
                 label = train_labels[i]
                 yhat = self.predict(train_docs[i])
                 if yhat != label:
                     for word in train_docs[i]:
-                        self.weights[label][word] += learning_tune*train_docs[i][word]
-                        self.weights[yhat][word] -= learning_tune*train_docs[i][word]
+                        self.weights[label][word] += train_docs[i][word]
+                        self.weights[yhat][word] -= train_docs[i][word]
+            print(str(iteration) +","+ str(self.test_eval(train_docs, train_labels)) +"," + str(self.test_eval(dev_docs, dev_labels)), file=sys.stderr)
+
 
 
     def score(self, doc, label):
@@ -109,17 +110,17 @@ if __name__ == "__main__":
     niters = int(args[0])
 
     train_docs, train_labels = load_featurized_docs('train')
-    print(len(train_docs), 'training docs with',
-        sum(len(d) for d in train_docs)/len(train_docs), 'percepts on avg', file=sys.stderr)
+    #print(len(train_docs), 'training docs with',
+    #    sum(len(d) for d in train_docs)/len(train_docs), 'percepts on avg', file=sys.stderr)
 
     dev_docs,  dev_labels  = load_featurized_docs('dev')
-    print(len(dev_docs), 'dev docs with',
-        sum(len(d) for d in dev_docs)/len(dev_docs), 'percepts on avg', file=sys.stderr)
+    #print(len(dev_docs), 'dev docs with',
+    #    sum(len(d) for d in dev_docs)/len(dev_docs), 'percepts on avg', file=sys.stderr)
 
 
     test_docs,  test_labels  = load_featurized_docs('test')
-    print(len(test_docs), 'test docs with',
-        sum(len(d) for d in test_docs)/len(test_docs), 'percepts on avg', file=sys.stderr)
+    #print(len(test_docs), 'test docs with',
+    #    sum(len(d) for d in test_docs)/len(test_docs), 'percepts on avg', file=sys.stderr)
 
     ptron = Perceptron(train_docs, train_labels, MAX_ITERATIONS=niters, dev_docs=dev_docs, dev_labels=dev_labels)
  
