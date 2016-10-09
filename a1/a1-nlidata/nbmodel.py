@@ -36,7 +36,7 @@ def load_docs(direc, lemmatize, labelMapFile='labels.csv'):
         with open(file_path) as f:
             doc = f.read().split()
         # credit: http://stackoverflow.com/questions/13259288/returning-a-list-of-words-after-reading-a-file-in-python
-       # print("lemma")
+        # print("lemma")
             if lemmatize:
                 docs.append([lm.lemmatize(word) for word in doc])
             else:
@@ -82,6 +82,7 @@ class NaiveBayes:
         
         for l in self.priorProbs:
             self.priorProbs[l] = np.divide(labelCounts[l], len(labels))
+            #print(l +","+str(self.priorProbs[l])+","+str(labelCounts[l]), file=sys.stderr) #This was for part one
             for word in self.trainVocab: 
                 self.likelihoodProbs[l][word] = np.divide(wordCounts[l][word]+self.ALPHA, totalWordCounts[l]+self.ALPHA*(len(self.trainVocab)+1))
             self.likelihoodProbs[l]['**OOV**'] = np.divide(self.ALPHA, totalWordCounts[l]+self.ALPHA*(len(self.trainVocab)+1))
@@ -135,8 +136,8 @@ if __name__ == "__main__":
     if args[0]=='-l':
         lemmatize = True
         args = args[1:]
-    alpha = float(args[0])
-    print(alpha)
+    #alpha = float(args[0])
+
     train_docs, train_labels = load_docs('train', lemmatize)
     print(len(train_docs), 'training docs with',
         sum(len(d) for d in train_docs), 'tokens', file=sys.stderr)
@@ -145,6 +146,12 @@ if __name__ == "__main__":
     print(len(test_docs), 'eval docs with',
         sum(len(d) for d in test_docs), 'tokens', file=sys.stderr)
 
-    nb = NaiveBayes(train_docs, train_labels, alpha)
-
-    print(nb.eval(test_docs, test_labels))
+    print("alpha, accuracy", file=sys.stderr)
+    for alpha in args:
+        alpha = float(alpha)
+        nb = NaiveBayes(train_docs, train_labels, alpha)
+        
+        #print("dev:"+str(alpha)+","+str(nb.eval(test_docs, test_labels)), file=sys.stderr)
+        test_docs,  test_labels  = load_docs('test', lemmatize)
+        nb = NaiveBayes(train_docs, train_labels, alpha)
+        print("test:"+str(alpha)+","+str(nb.eval(test_docs, test_labels)), file=sys.stderr)

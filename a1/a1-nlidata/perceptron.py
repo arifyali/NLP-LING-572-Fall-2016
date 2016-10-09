@@ -11,6 +11,7 @@ import sys, os, glob
 from collections import Counter
 from math import log
 from numpy import mean
+import numpy as np
 
 from nltk.stem.wordnet import WordNetLemmatizer
 
@@ -60,9 +61,11 @@ class Perceptron:
         At the end of training, self.weights should contain the final model
         parameters.
         """
-        print("iteration,train_accuracy,dev_accuracy", file=sys.stderr)
+        print("iteration,train_accuracy,dev_accuracy,update", file=sys.stderr)
         for iteration in range(self.MAX_ITERATIONS):
-            
+            last_weights = self.copy_weights()
+            update = 0
+            train_accuracy = 0
             for i in range(len(train_docs)):
                 label = train_labels[i]
                 yhat = self.predict(train_docs[i])
@@ -70,7 +73,10 @@ class Perceptron:
                     for word in train_docs[i]:
                         self.weights[label][word] += train_docs[i][word]
                         self.weights[yhat][word] -= train_docs[i][word]
-            print(str(iteration) +","+ str(self.test_eval(train_docs, train_labels)) +"," + str(self.test_eval(dev_docs, dev_labels)), file=sys.stderr)
+                    train_accuracy -= 1
+                    update += 1
+
+            print(str(iteration) +","+ str(np.divide(len(train_docs)+train_accuracy, len(train_docs))) +"," + str(self.test_eval(dev_docs, dev_labels))+","+str(update), file=sys.stderr)
 
 
 
