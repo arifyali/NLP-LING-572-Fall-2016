@@ -38,7 +38,7 @@ def load_docs(direc, lemmatize, labelMapFile='labels.csv'):
         # credit: http://stackoverflow.com/questions/13259288/returning-a-list-of-words-after-reading-a-file-in-python
         # print("lemma")
             if lemmatize:
-                docs.append([ for word in doc])
+                docs.append([lm.lemmatize(word) for word in doc])
             else:
                 docs.append(doc)
     #print("finish lemma")
