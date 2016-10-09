@@ -14,20 +14,30 @@ from numpy import mean
 import numpy as np
 
 from nltk.stem.wordnet import WordNetLemmatizer
+nltk.download('wordnet')
+lm = WordNetLemmatizer()
 
 from evaluation import Eval
 
 from nbmodel import load_docs
 
-def extract_feats(doc):
+def extract_feats(doc, uppercase = False, lemmatize = False, ngram = False, n = 1):
     """
     Extract input features (percepts) for a given document.
     Each percept is a pairing of a name and a boolean, integer, or float value.
     A document's percepts are the same regardless of the label considered.
     """
     ff = Counter()
-    for word in doc:
-        ff[word] = 1
+    for i in range((len(doc)-n+1)):
+        ngram = ' '.join(doc[i:i+n])
+        ff[ngram] = 1
+    else:    
+        for word in doc:
+            if uppercase:
+                word = word.upper()
+            if lemmatize:
+                word = lm.lemmatize(word)
+            ff[word] = 1
     ff['bias_term'] = 1
     return ff
 
@@ -112,19 +122,36 @@ class Perceptron:
 
 
 if __name__ == "__main__":
+
     args = sys.argv[1:]
+    uppercase = False
+    lemmatize = False
+    ngram = False
+    n = 1 
+    if args[0] == '-l':
+        lemmatize = True
+        args = args[1:]
+
+    if args[0] == '-u':
+        uppercase = True
+        args = args[1:]
+    
+    if args[0] == '-n':
+        ngram = True
+        n = float(args[1])
+        args = args[2:]
     niters = int(args[0])
 
-    train_docs, train_labels = load_featurized_docs('train')
+    train_docs, train_labels = load_featurized_docs('train',uppercase, lemmatize, ngram, n)
     #print(len(train_docs), 'training docs with',
     #    sum(len(d) for d in train_docs)/len(train_docs), 'percepts on avg', file=sys.stderr)
 
-    dev_docs,  dev_labels  = load_featurized_docs('dev')
+    dev_docs,  dev_labels  = load_featurized_docs('dev', uppercase, lemmatize, ngram, n)
     #print(len(dev_docs), 'dev docs with',
     #    sum(len(d) for d in dev_docs)/len(dev_docs), 'percepts on avg', file=sys.stderr)
 
 
-    test_docs,  test_labels  = load_featurized_docs('test')
+    test_docs,  test_labels  = load_featurized_docs('test',uppercase, lemmatize, ngram, n)
     #print(len(test_docs), 'test docs with',
     #    sum(len(d) for d in test_docs)/len(test_docs), 'percepts on avg', file=sys.stderr)
 
