@@ -14,6 +14,7 @@ from numpy import mean
 import numpy as np
 
 from nltk.stem.wordnet import WordNetLemmatizer
+import nltk
 nltk.download('wordnet')
 lm = WordNetLemmatizer()
 
