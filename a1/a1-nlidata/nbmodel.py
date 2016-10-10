@@ -115,7 +115,8 @@ class NaiveBayes:
         joints = {l: 0 for l in self.CLASSES}
         for l in joints:
             joints[l] = self.joint_prob(doc, l)
-        max_class = max(joints, key=joints.get)
+        # max_class = max(joints, key=joints.get)
+        max_class = max(self.priorProbs, key=self.priorProbs.get)
         # credit: http://stackoverflow.com/questions/268272/getting-key-with-maximum-value-in-dictionary        
         return max_class
 
@@ -149,10 +150,10 @@ if __name__ == "__main__":
     print("alpha, accuracy", file=sys.stderr)
     for alpha in args:
         alpha = float(alpha)
-        nb = NaiveBayes(train_docs, train_labels, alpha)
+        #nb = NaiveBayes(train_docs, train_labels, alpha)
         
         #print("dev:"+str(alpha)+","+str(nb.eval(dev_docs, dev_labels)), file=sys.stderr)
         test_docs,  test_labels  = load_docs('test', lemmatize)
         #nb = NaiveBayes(train_docs, train_labels, alpha)
-        print("test:"+str(alpha)+","+str(nb.eval(test_docs, test_labels)), file=sys.stderr)
+        #print("test:"+str(alpha)+","+str(nb.eval(test_docs, test_labels)), file=sys.stderr)
         nb = NaiveBayes(dev_docs, dev_labels, alpha)
