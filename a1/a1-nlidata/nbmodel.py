@@ -79,10 +79,10 @@ class NaiveBayes:
                 self.trainVocab.add(word)
         # compute and store prior distribution over classes
         # (unsmoothed) in self.priorProbs
-        
+        print("Label,priorProbs,Label Count", file=sys.stderr)
         for l in self.priorProbs:
             self.priorProbs[l] = np.divide(labelCounts[l], len(labels))
-            #print(l +","+str(self.priorProbs[l])+","+str(labelCounts[l]), file=sys.stderr) #This was for part one
+            print(l +","+str(self.priorProbs[l])+","+str(labelCounts[l]), file=sys.stderr) #This was for part one
             for word in self.trainVocab: 
                 self.likelihoodProbs[l][word] = np.divide(wordCounts[l][word]+self.ALPHA, totalWordCounts[l]+self.ALPHA*(len(self.trainVocab)+1))
             self.likelihoodProbs[l]['**OOV**'] = np.divide(self.ALPHA, totalWordCounts[l]+self.ALPHA*(len(self.trainVocab)+1))
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     print(len(train_docs), 'training docs with',
         sum(len(d) for d in train_docs), 'tokens', file=sys.stderr)
 
-    test_docs,  test_labels  = load_docs('dev', lemmatize)
+    dev_docs,  dev_labels  = load_docs('dev', lemmatize)
     print(len(test_docs), 'eval docs with',
         sum(len(d) for d in test_docs), 'tokens', file=sys.stderr)
 
@@ -151,7 +151,8 @@ if __name__ == "__main__":
         alpha = float(alpha)
         nb = NaiveBayes(train_docs, train_labels, alpha)
         
-        #print("dev:"+str(alpha)+","+str(nb.eval(test_docs, test_labels)), file=sys.stderr)
+        #print("dev:"+str(alpha)+","+str(nb.eval(dev_docs, dev_labels)), file=sys.stderr)
         test_docs,  test_labels  = load_docs('test', lemmatize)
-        nb = NaiveBayes(train_docs, train_labels, alpha)
+        #nb = NaiveBayes(train_docs, train_labels, alpha)
         print("test:"+str(alpha)+","+str(nb.eval(test_docs, test_labels)), file=sys.stderr)
+        nb = NaiveBayes(dev_docs, dev_labels, alpha)
