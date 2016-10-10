@@ -126,6 +126,19 @@ class Perceptron:
             confusion_matrix[gold][pred] += 1
         #for l in self.CLASSES:
         #    print(confusion_matrix[l][l])
+        tp = 0
+        for l in self.CLASSES:
+            tp_fn = 0
+            tp_fp = 0
+            tp += confusion_matrix[l]l]
+            for p in self.CLASSES:
+                tp_fn += confusion_matrix[l][p]
+                tp_fp += confusion_matrix[p][l]
+            recall = np.divide(tp, tp_fn)
+            precision = np.divide(tp, tp_fp)
+            print("Precision for"+l+":"+str(precision), file=sys.stderr)
+            print("Recall for"+l+":"+str(recall), file=sys.stderr)
+            print("F1 for"+l+":"+str(np.divide(2*precision*recall, precision+recall)), file=sys.stderr)
 
         print(confusion_matrix, file=sys.stderr)
 
