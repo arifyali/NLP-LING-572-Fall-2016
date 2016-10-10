@@ -150,8 +150,8 @@ class Perceptron:
             print("bias feature for "+ self.CLASSES[l] + ": " + str(label_weights['***bias_term***']),file=sys.stderr)
 
      
-    #    ev = Eval(test_labels, pred_labels)
-    #    return ev.accuracy()
+        ev = Eval(test_labels, pred_labels)
+        return ev.accuracy()
 
 
 if __name__ == "__main__":
