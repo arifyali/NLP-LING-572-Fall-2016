@@ -145,7 +145,7 @@ if __name__ == "__main__":
 
     dev_docs,  dev_labels  = load_docs('dev', lemmatize)
     print(len(dev_docs), 'eval docs with',
-        sum(len(d) for d in test_docs), 'tokens', file=sys.stderr)
+        sum(len(d) for d in dev_docs), 'tokens', file=sys.stderr)
 
     print("alpha, accuracy", file=sys.stderr)
     for alpha in args:
