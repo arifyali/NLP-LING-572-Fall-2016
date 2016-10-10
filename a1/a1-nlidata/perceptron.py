@@ -111,7 +111,10 @@ class Perceptron:
         """
         max_label = self.CLASSES[0]
         max_score = self.score(doc, max_label)
-        # note: the dict method from nbmodels don't work because there is a greater certainity of 
+        """
+        note: the dict method from nbmodels don't work because there is a greater certainity 
+        of initial weights being the same
+        """
         for l in self.CLASSES[1:]:
             current_score = self.score(doc, l)
             if current_score > max_score:
@@ -134,9 +137,12 @@ class Perceptron:
             precision = np.divide(tp,tp_fp)
             recall = np.divide(tp,tp_fn)
             f1 = np.divide(2*precision*recall, precision+recall)
-            print("precision for " + l +": ", +str(precision), file=sys.stderr)
-            print("recall for " + l +": ", +str(recall), file=sys.stderr)
-            print("F1 for " + l +": ", +str(f1), file=sys.stderr)
+            #all the confusion matrix calculations by language
+            print("precision for " + l +": " +str(precision), file=sys.stderr)
+            print("recall for " + l +": " +str(recall), file=sys.stderr)
+            print("F1 for " + l +": " +str(f1), file=sys.stderr)
+            
+            # gives the max weights
             label_weights = self.weights[l]
             print("max weights for " + l + ": " + str(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
             print("min weights for " + l + ": " + str(sorted(label_weights, key=label_weights.get)[:10]), file=sys.stderr)
