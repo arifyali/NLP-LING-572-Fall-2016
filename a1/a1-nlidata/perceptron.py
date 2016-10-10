@@ -146,11 +146,6 @@ class Perceptron:
             recall += str(recall) +'\t'
             fl += str(recall) +'\t'
             bias_feature +=str(label_weights['***bias_term***']) + '\t'
-		"""
-            print("precision for " + self.CLASSES[l] +": " +str(precision), file=sys.stderr)
-            print("recall for " + self.CLASSES[l] +": " +str(recall), file=sys.stderr)
-            print("F1 for " + self.CLASSES[l] +": " +str(f1), file=sys.stderr)
-            """
             # gives the max weights
             
             print("max weights for " + self.CLASSES[l] + ":\t" + '\t'.join(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
