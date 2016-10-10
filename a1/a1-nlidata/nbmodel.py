@@ -144,7 +144,7 @@ if __name__ == "__main__":
         sum(len(d) for d in train_docs), 'tokens', file=sys.stderr)
 
     dev_docs,  dev_labels  = load_docs('dev', lemmatize)
-    print(len(test_docs), 'eval docs with',
+    print(len(dev_docs), 'eval docs with',
         sum(len(d) for d in test_docs), 'tokens', file=sys.stderr)
 
     print("alpha, accuracy", file=sys.stderr)
@@ -153,7 +153,7 @@ if __name__ == "__main__":
         #nb = NaiveBayes(train_docs, train_labels, alpha)
         
         #print("dev:"+str(alpha)+","+str(nb.eval(dev_docs, dev_labels)), file=sys.stderr)
-        test_docs,  test_labels  = load_docs('test', lemmatize)
+        test_docs, test_labels  = load_docs('test', lemmatize)
         #nb = NaiveBayes(train_docs, train_labels, alpha)
         #print("test:"+str(alpha)+","+str(nb.eval(test_docs, test_labels)), file=sys.stderr)
         nb = NaiveBayes(dev_docs, dev_labels, alpha)
