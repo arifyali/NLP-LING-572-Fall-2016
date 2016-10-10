@@ -126,9 +126,9 @@ class Perceptron:
         pred_labels = [self.predict(d) for d in test_docs]
         cm = confusion_matrix(test_labels, pred_labels, labels = self.CLASSES)
         precision = NULL
-	recall = NULL
-	bias_feature = NULL
-	f1 = NULL
+        recall = NULL
+        bias_feature = NULL
+        f1 = NULL
 	# I used the sklearn package, which makes building confusion matices similar to R
         print(cm, file=sys.stderr)
         for l in range(len(self.CLASSES)):
@@ -156,11 +156,12 @@ class Perceptron:
             print("max weights for " + self.CLASSES[l] + ":\t" + '\t'.join(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
             print("min weights for " + self.CLASSES[l] + ":\t" + '\t'.join(sorted(label_weights, key=label_weights.get)[:10]), file=sys.stderr)
 	
-	print('\t'.join(self.CLASSES))
+        print('\t'.join(self.CLASSES))
      	print(precision, file=sys.stderr)
-	print(recall, file=sys.stderr)
-	print(f1, file=sys.stderr)
-	print(bias_feature, file=sys.stderr)
+        print(recall, file=sys.stderr)
+        print(f1, file=sys.stderr)
+        print(bias_feature, file=sys.stderr)
+        
         ev = Eval(test_labels, pred_labels)
         return ev.accuracy()
 
