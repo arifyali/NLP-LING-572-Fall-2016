@@ -37,7 +37,6 @@ def extract_feats(doc, uppercase = False, ngram = False, n = 1):
             if uppercase:
                 ngram = ngram.upper()
                  #this does the ngram 
-            ngram = ' '.join(doc[i:i+n])
             ff[ngram] = 1
     else:    
         for word in doc:
