@@ -71,7 +71,7 @@ class Perceptron:
         At the end of training, self.weights should contain the final model
         parameters.
         """
-        print("iteration,train_accuracy,dev_accuracy,update", file=sys.stderr)
+        #print("iteration,train_accuracy,dev_accuracy,update", file=sys.stderr)
         for iteration in range(self.MAX_ITERATIONS):
             last_weights = self.copy_weights()
             update = 0
@@ -117,18 +117,21 @@ class Perceptron:
 
     def test_eval(self, test_docs, test_labels):
         pred_labels = [self.predict(d) for d in test_docs]
-        #confusion_matrix = {l: Counter() for l in self.CLASSES}
-        #for pred in self.CLASSES:
-        #    confusion_matrix[pred] = {l: 0 for l in self.CLASSES}
-        #for i in range(test_docs)
-        #    gold = test_labels[i]
-        #    pred = pred_labels[i]
-        #    confusion_matrix[gold][pred] += 1
-        # return confusion_matrix
+        confusion_matrix = {l: Counter() for l in self.CLASSES}
+        for pred in self.CLASSES:
+            confusion_matrix[pred] = {l: 0 for l in self.CLASSES}
+        for i in range(test_docs)
+            gold = test_labels[i]
+            pred = pred_labels[i]
+            confusion_matrix[gold][pred] += 1
+        #for l in self.CLASSES:
+        #    print(confusion_matrix[l][l])
+
+        print(confusion_matrix, file=sys.stderr)
 
              
-        ev = Eval(test_labels, pred_labels)
-        return ev.accuracy()
+        #ev = Eval(test_labels, pred_labels)
+        #return ev.accuracy()
 
 
 if __name__ == "__main__":
