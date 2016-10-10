@@ -95,9 +95,9 @@ class Perceptron:
                 break
             for l in self.CLASSES:
                 label_weights = self.weights[l]
-            print("max weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
-            print("min weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get)[:10]), file=sys.stderr)
-            print("bias feature for"+ l + ":" + str(label_weights['***bias_term***']),file=sys.stderr)
+        print("max weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
+        print("min weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get)[:10]), file=sys.stderr)
+        print("bias feature for"+ l + ":" + str(label_weights['***bias_term***']),file=sys.stderr)
                                     
 
     def score(self, doc, label):
