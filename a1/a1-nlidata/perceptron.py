@@ -117,18 +117,18 @@ class Perceptron:
 
     def test_eval(self, test_docs, test_labels):
         pred_labels = [self.predict(d) for d in test_docs]
-        confusion_matrix = {l: Counter() for l in self.CLASSES}
-        for pred in self.CLASSES:
-            confusion_matrix[pred] = {l: 0 for l in self.CLASSES}
-        for i in range(test_docs)
-            gold = test_labels[i]
-            pred = pred_labels[i]
-            confusion_matrix[gold][pred] += 1
-        return confusion_matrix
+        #confusion_matrix = {l: Counter() for l in self.CLASSES}
+        #for pred in self.CLASSES:
+        #    confusion_matrix[pred] = {l: 0 for l in self.CLASSES}
+        #for i in range(test_docs)
+        #    gold = test_labels[i]
+        #    pred = pred_labels[i]
+        #    confusion_matrix[gold][pred] += 1
+        # return confusion_matrix
 
              
-        # ev = Eval(test_labels, pred_labels)
-        # return ev.accuracy()
+        ev = Eval(test_labels, pred_labels)
+        return ev.accuracy()
 
 
 if __name__ == "__main__":
