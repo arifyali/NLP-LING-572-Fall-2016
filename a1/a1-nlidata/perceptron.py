@@ -138,15 +138,17 @@ class Perceptron:
             recall = np.divide(tp,tp_fn)
             f1 = np.divide(2*precision*recall, precision+recall)
             #all the confusion matrix calculations by language
-            print("precision for " + l +": " +str(precision), file=sys.stderr)
-            print("recall for " + l +": " +str(recall), file=sys.stderr)
-            print("F1 for " + l +": " +str(f1), file=sys.stderr)
+            label_weights = self.weights[l]
+
+            print("precision for " + self.CLASSES[l] +": " +str(precision), file=sys.stderr)
+            print("recall for " + self.CLASSES[l] +": " +str(recall), file=sys.stderr)
+            print("F1 for " + self.CLASSES[l] +": " +str(f1), file=sys.stderr)
             
             # gives the max weights
-            label_weights = self.weights[l]
-            print("max weights for " + l + ": " + str(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
-            print("min weights for " + l + ": " + str(sorted(label_weights, key=label_weights.get)[:10]), file=sys.stderr)
-            print("bias feature for "+ l + ": " + str(label_weights['***bias_term***']),file=sys.stderr)
+            
+            print("max weights for " + self.CLASSES[l] + ": " + str(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
+            print("min weights for " + self.CLASSES[l] + ": " + str(sorted(label_weights, key=label_weights.get)[:10]), file=sys.stderr)
+            print("bias feature for "+ self.CLASSES[l] + ": " + str(label_weights['***bias_term***']),file=sys.stderr)
 
      
     #    ev = Eval(test_labels, pred_labels)
