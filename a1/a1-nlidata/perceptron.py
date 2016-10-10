@@ -85,7 +85,7 @@ class Perceptron:
                         self.weights[yhat][word] -= train_docs[i][word]
                     train_accuracy -= 1
                     update += 1
-            print(str(iteration) +","+ str(np.divide(len(train_docs)+train_accuracy, len(train_docs))) +"," + str(self.test_eval(dev_docs, dev_labels))+","+str(update), file=sys.stderr)
+            # print(str(iteration) +","+ str(np.divide(len(train_docs)+train_accuracy, len(train_docs))) +"," + str(self.test_eval(dev_docs, dev_labels))+","+str(update), file=sys.stderr)
             if np.divide(len(train_docs)+train_accuracy, len(train_docs)) == 1.0:
                 break
 
@@ -117,8 +117,18 @@ class Perceptron:
 
     def test_eval(self, test_docs, test_labels):
         pred_labels = [self.predict(d) for d in test_docs]
-        ev = Eval(test_labels, pred_labels)
-        return ev.accuracy()
+        confusion_matrix = {l: Counter() for l in self.CLASSES}
+        for pred in self.CLASSES:
+            confusion_matrix[pred] = {l: 0 for l in self.CLASSES}
+        for i in range(test_docs)
+            gold = test_labels[i]
+            pred = pred_labels[i]
+            confusion_matrix[gold][pred] += 1
+        return confusion_matrix
+
+             
+        # ev = Eval(test_labels, pred_labels)
+        # return ev.accuracy()
 
 
 if __name__ == "__main__":
@@ -169,4 +179,5 @@ if __name__ == "__main__":
     #    sum(len(d) for d in test_docs)/len(test_docs), 'percepts on avg', file=sys.stderr)
 
     ptron = Perceptron(train_docs, train_labels, MAX_ITERATIONS=niters, dev_docs=dev_docs, dev_labels=dev_labels)
- 
+    acc = ptron.test_eval(test_docs, test_labels)
+    print(acc, file=sys.stderr)
