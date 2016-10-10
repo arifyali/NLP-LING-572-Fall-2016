@@ -85,7 +85,7 @@ class Perceptron:
                         self.weights[yhat][word] -= train_docs[i][word]
                     train_accuracy -= 1
                     update += 1
-            if np.divide(len(train_docs)+train_accuracy == 1.0:
+            if np.divide(len(train_docs)+train_accuracy, len(train_docs)) == 1.0:
                 break
             print(str(iteration) +","+ str(np.divide(len(train_docs)+train_accuracy, len(train_docs))) +"," + str(self.test_eval(dev_docs, dev_labels))+","+str(update), file=sys.stderr)
 
