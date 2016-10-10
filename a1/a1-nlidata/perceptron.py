@@ -22,6 +22,8 @@ from evaluation import Eval
 
 from nbmodel import load_docs
 
+from sklearn.metrics import confusion_matrix
+
 def extract_feats(doc, uppercase = False, ngram = False, n = 1):
     """
     Extract input features (percepts) for a given document.
@@ -89,9 +91,9 @@ class Perceptron:
                 break
             for l in self.CLASSES:
                 label_weights = self.weights[l]
-                print("max weights:"+ sorted(label_weights, key=label_weights.get, reverse = True)[:10])
-                print("min weights:"+ sorted(label_weights, key=label_weights.get)[:10])
-                print("bias term:", str(label_weights['bias_term']))
+                print("max weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
+                print("min weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get)[:10]), file=sys.stderr)
+                print("bias feature for"+ l + ":" + str(label_weights['bias_term']),file=sys.stderr)
 
 
     def score(self, doc, label):
@@ -121,30 +123,21 @@ class Perceptron:
 
     def test_eval(self, test_docs, test_labels):
         pred_labels = [self.predict(d) for d in test_docs]
-        confusion_matrix = {l: Counter() for l in self.CLASSES}
-        for pred in self.CLASSES:
-            confusion_matrix[pred] = {l: 0 for l in self.CLASSES}
-        for i in range(len(test_docs)):
-            gold = test_labels[i]
-            pred = pred_labels[i]
-            confusion_matrix[gold][pred] += 1
-        #for l in self.CLASSES:
-        #    print(confusion_matrix[l][l])
-        tp = 0
-        for l in self.CLASSES:
-            tp_fn = 0
-            tp_fp = 0
-            tp += confusion_matrix[l]l]
-            for p in self.CLASSES:
-                tp_fn += confusion_matrix[l][p]
-                tp_fp += confusion_matrix[p][l]
-            recall = np.divide(tp, tp_fn)
-            precision = np.divide(tp, tp_fp)
-            print("Precision for"+l+":"+str(precision), file=sys.stderr)
-            print("Recall for"+l+":"+str(recall), file=sys.stderr)
-            print("F1 for"+l+":"+str(np.divide(2*precision*recall, precision+recall)), file=sys.stderr)
-
+        confusion_matrix = confusion_matrix(test_labels, pred_labels, labels = self.CLASSES)
         print(confusion_matrix, file=sys.stderr)
+        for l in range(len(self.CLASSES)):
+            tp = confusion_matrix[l][l]
+            tp_fn = sum(confusion_matrix[l])
+            tp_fp = 0
+            for i in range(len(self.CLASSES)):
+                tp_fp += confusion_matrix[i][l]
+            precision = np.divide(tp,tp_fp)
+            recall = np.divide(tp,tp_fn)
+            f1 = np.divide(2*precision*recall, precision+recall)
+            print("precision for " + l +": ", +str(precision), file=sys.stderr)
+            print("recall for " + l +": ", +str(recall), file=sys.stderr)
+            print("F1 for " + l +": ", +str(f1), file=sys.stderr)
+
 
              
         #ev = Eval(test_labels, pred_labels)
