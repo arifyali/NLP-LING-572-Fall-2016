@@ -76,7 +76,7 @@ class Perceptron:
         At the end of training, self.weights should contain the final model
         parameters.
         """
-        #print("iteration,train_accuracy,dev_accuracy,update", file=sys.stderr)
+        print("iteration,train_accuracy,dev_accuracy,update", file=sys.stderr)
         for iteration in range(self.MAX_ITERATIONS):
             update = 0
             train_accuracy = 0
@@ -89,7 +89,7 @@ class Perceptron:
                         self.weights[yhat][word] -= train_docs[i][word]
                     train_accuracy -= 1
                     update += 1
-            #print(str(iteration) +","+ str(np.divide(len(train_docs)+train_accuracy, len(train_docs))) +"," + str(self.test_eval(dev_docs, dev_labels))+","+str(update), file=sys.stderr)
+            print(str(iteration) +","+ str(np.divide(len(train_docs)+train_accuracy, len(train_docs))) +"," + str(self.test_eval(dev_docs, dev_labels))+","+str(update), file=sys.stderr)
             if np.divide(len(train_docs)+train_accuracy, len(train_docs)) == 1.0:
                 break
                                                 
