@@ -40,7 +40,7 @@ def extract_feats(doc, uppercase = False, ngram = False, n = 1):
             if uppercase:
                 word = word.upper()
             ff[word] = 1
-    ff['bias_term'] = 1
+    ff['***bias_term***'] = 1
     return ff
 
 def load_featurized_docs(datasplit, uppercase = False, lemmatize = False, ngram = False, n = 1):
@@ -93,7 +93,7 @@ class Perceptron:
                 label_weights = self.weights[l]
                 print("max weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
                 print("min weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get)[:10]), file=sys.stderr)
-                print("bias feature for"+ l + ":" + str(label_weights['bias_term']),file=sys.stderr)
+                print("bias feature for"+ l + ":" + str(label_weights['***bias_term***']),file=sys.stderr)
 
 
     def score(self, doc, label):
