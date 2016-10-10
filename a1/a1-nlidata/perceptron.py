@@ -29,9 +29,10 @@ def extract_feats(doc, uppercase = False, ngram = False, n = 1):
     A document's percepts are the same regardless of the label considered.
     """
     ff = Counter()
-    for i in range((len(doc)-n+1)):
-        ngram = ' '.join(doc[i:i+n])
-        ff[ngram] = 1
+    if ngram:
+        for i in range((len(doc)-n+1)): #this does the ngram 
+            ngram = ' '.join(doc[i:i+n])
+            ff[ngram] = 1
     else:    
         for word in doc:
             if uppercase:
@@ -84,7 +85,8 @@ class Perceptron:
                         self.weights[yhat][word] -= train_docs[i][word]
                     train_accuracy -= 1
                     update += 1
-
+            if np.divide(len(train_docs)+train_accuracy == 1.0:
+                break
             print(str(iteration) +","+ str(np.divide(len(train_docs)+train_accuracy, len(train_docs))) +"," + str(self.test_eval(dev_docs, dev_labels))+","+str(update), file=sys.stderr)
 
 
@@ -123,22 +125,35 @@ class Perceptron:
 if __name__ == "__main__":
 
     args = sys.argv[1:]
-    uppercase = False
-    lemmatize = False
-    ngram = False
-    n = 1 
+
+    average = False
     if args[0] == '-l':
         lemmatize = True
         args = args[1:]
+    else:
+        lemmatize = False
 
     if args[0] == '-u':
         uppercase = True
         args = args[1:]
+    else:
+        uppercase = False
+
     
     if args[0] == '-n':
         ngram = True
         n = int(args[1])
         args = args[2:]
+    else:
+        ngram = False
+        n = 1
+
+    # work later
+    if args[0] == '-a':
+        average = True
+    else:
+        average = False
+
     niters = int(args[0])
 
     train_docs, train_labels = load_featurized_docs('train',uppercase, lemmatize, ngram, n)
