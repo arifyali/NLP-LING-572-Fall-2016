@@ -73,6 +73,8 @@ class Perceptron:
         """
         print("iteration,train_accuracy,dev_accuracy,update", file=sys.stderr)
         for iteration in range(self.MAX_ITERATIONS):
+            if np.divide(len(train_docs)+train_accuracy, len(train_docs)) == 1.0:
+                break
             last_weights = self.copy_weights()
             update = 0
             train_accuracy = 0
@@ -85,8 +87,7 @@ class Perceptron:
                         self.weights[yhat][word] -= train_docs[i][word]
                     train_accuracy -= 1
                     update += 1
-            if np.divide(len(train_docs)+train_accuracy, len(train_docs)) == 1.0:
-                break
+            
             print(str(iteration) +","+ str(np.divide(len(train_docs)+train_accuracy, len(train_docs))) +"," + str(self.test_eval(dev_docs, dev_labels))+","+str(update), file=sys.stderr)
 
 
