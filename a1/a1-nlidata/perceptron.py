@@ -120,7 +120,7 @@ class Perceptron:
         confusion_matrix = {l: Counter() for l in self.CLASSES}
         for pred in self.CLASSES:
             confusion_matrix[pred] = {l: 0 for l in self.CLASSES}
-        for i in range(test_docs):
+        for i in range(len(test_docs)):
             gold = test_labels[i]
             pred = pred_labels[i]
             confusion_matrix[gold][pred] += 1
