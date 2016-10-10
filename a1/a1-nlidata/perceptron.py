@@ -73,7 +73,6 @@ class Perceptron:
         """
         #print("iteration,train_accuracy,dev_accuracy,update", file=sys.stderr)
         for iteration in range(self.MAX_ITERATIONS):
-            last_weights = self.copy_weights()
             update = 0
             train_accuracy = 0
             for i in range(len(train_docs)):
@@ -88,6 +87,11 @@ class Perceptron:
             # print(str(iteration) +","+ str(np.divide(len(train_docs)+train_accuracy, len(train_docs))) +"," + str(self.test_eval(dev_docs, dev_labels))+","+str(update), file=sys.stderr)
             if np.divide(len(train_docs)+train_accuracy, len(train_docs)) == 1.0:
                 break
+            for l in self.CLASSES:
+                label_weights = self.weights[l]
+                print("max weights:"+ sorted(label_weights, key=label_weights.get, reverse = True)[:10])
+                print("min weights:"+ sorted(label_weights, key=label_weights.get)[:10])
+                print("bias term:", str(label_weights['bias_term']))
 
 
     def score(self, doc, label):
