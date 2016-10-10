@@ -142,8 +142,8 @@ class Perceptron:
             f1 = np.divide(2*precision*recall, precision+recall)
             #all the confusion matrix calculations by language
             label_weights = self.weights[self.CLASSES[l]]
-            precision.append(str(precision))
-            recall.append(str(recall))
+            precision.append(str(precision.float32(0).item()))
+            recall.append(str(recall.float32(0).item()))
             f1.append(str(label_weights['***bias_term***']))
             #recall += str(recall) +'\t'
              #fl += str(recall) +'\t'
