@@ -125,7 +125,11 @@ class Perceptron:
     def test_eval(self, test_docs, test_labels):
         pred_labels = [self.predict(d) for d in test_docs]
         cm = confusion_matrix(test_labels, pred_labels, labels = self.CLASSES)
-        # I used the sklearn package, which makes building confusion matices similar to R
+        precision = NULL
+	recall = NULL
+	bias_feature = NULL
+	f1 = NULL
+	# I used the sklearn package, which makes building confusion matices similar to R
         print(cm, file=sys.stderr)
         for l in range(len(self.CLASSES)):
             tp = cm[l][l]
@@ -138,18 +142,25 @@ class Perceptron:
             f1 = np.divide(2*precision*recall, precision+recall)
             #all the confusion matrix calculations by language
             label_weights = self.weights[self.CLASSES[l]]
-
+	    precision += str(precision) +'\t'
+	    recall += str(recall) +'\t'
+	    fl += str(recall) +'\t'
+	    bias_feature +=str(label_weights['***bias_term***']) + '\t'
+		"""
             print("precision for " + self.CLASSES[l] +": " +str(precision), file=sys.stderr)
             print("recall for " + self.CLASSES[l] +": " +str(recall), file=sys.stderr)
             print("F1 for " + self.CLASSES[l] +": " +str(f1), file=sys.stderr)
-            
+            """
             # gives the max weights
             
-            print("max weights for " + self.CLASSES[l] + ": " + str(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
-            print("min weights for " + self.CLASSES[l] + ": " + str(sorted(label_weights, key=label_weights.get)[:10]), file=sys.stderr)
-            print("bias feature for "+ self.CLASSES[l] + ": " + str(label_weights['***bias_term***']),file=sys.stderr)
-
-     
+            print("max weights for " + self.CLASSES[l] + ":\t" + '\t'.join(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
+            print("min weights for " + self.CLASSES[l] + ":\t" + '\t'.join(sorted(label_weights, key=label_weights.get)[:10]), file=sys.stderr)
+	
+	print('\t'.join(self.CLASSES))
+     	print(precision, file=sys.stderr)
+	print(recall, file=sys.stderr)
+	print(f1, file=sys.stderr)
+	print(bias_feature, file=sys.stderr)
         ev = Eval(test_labels, pred_labels)
         return ev.accuracy()
 
