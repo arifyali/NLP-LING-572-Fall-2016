@@ -215,4 +215,4 @@ if __name__ == "__main__":
 
     ptron = Perceptron(train_docs, train_labels, MAX_ITERATIONS=niters, dev_docs=dev_docs, dev_labels=dev_labels)
     acc = ptron.test_eval(test_docs, test_labels)
-    print(acc, file=sys.stderr)
+    #print(acc, file=sys.stderr)
