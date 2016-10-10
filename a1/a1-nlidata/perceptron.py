@@ -90,15 +90,15 @@ class Perceptron:
                         self.weights[yhat][word] -= train_docs[i][word]
                     train_accuracy -= 1
                     update += 1
-            print(str(iteration) +","+ str(np.divide(len(train_docs)+train_accuracy, len(train_docs))) +"," + str(self.test_eval(dev_docs, dev_labels))+","+str(update), file=sys.stderr)
+            #print(str(iteration) +","+ str(np.divide(len(train_docs)+train_accuracy, len(train_docs))) +"," + str(self.test_eval(dev_docs, dev_labels))+","+str(update), file=sys.stderr)
             if np.divide(len(train_docs)+train_accuracy, len(train_docs)) == 1.0:
                 break
             for l in self.CLASSES:
                 label_weights = self.weights[l]
-            '''print("max weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
-                                                print("min weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get)[:10]), file=sys.stderr)
-                                                print("bias feature for"+ l + ":" + str(label_weights['***bias_term***']),file=sys.stderr)
-                                    '''
+            print("max weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
+            print("min weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get)[:10]), file=sys.stderr)
+            print("bias feature for"+ l + ":" + str(label_weights['***bias_term***']),file=sys.stderr)
+                                    
 
     def score(self, doc, label):
         """
@@ -127,7 +127,7 @@ class Perceptron:
 
     def test_eval(self, test_docs, test_labels):
         pred_labels = [self.predict(d) for d in test_docs]
-        '''confusion_matrix = confusion_matrix(test_labels, pred_labels, labels = self.CLASSES)
+        confusion_matrix = confusion_matrix(test_labels, pred_labels, labels = self.CLASSES)
                                 print(confusion_matrix, file=sys.stderr)
                                 for l in range(len(self.CLASSES)):
                                     tp = confusion_matrix[l][l]
@@ -140,10 +140,10 @@ class Perceptron:
                                     f1 = np.divide(2*precision*recall, precision+recall)
                                     print("precision for " + l +": ", +str(precision), file=sys.stderr)
                                     print("recall for " + l +": ", +str(recall), file=sys.stderr)
-                                    print("F1 for " + l +": ", +str(f1), file=sys.stderr)'''
+                                    print("F1 for " + l +": ", +str(f1), file=sys.stderr)
      
-        ev = Eval(test_labels, pred_labels)
-        return ev.accuracy()
+    #    ev = Eval(test_labels, pred_labels)
+    #    return ev.accuracy()
 
 
 if __name__ == "__main__":
