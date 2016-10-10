@@ -95,9 +95,9 @@ class Perceptron:
                 break
             for l in self.CLASSES:
                 label_weights = self.weights[l]
-        print("max weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
-        print("min weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get)[:10]), file=sys.stderr)
-        print("bias feature for"+ l + ":" + str(label_weights['***bias_term***']),file=sys.stderr)
+                print("max weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get, reverse = True)[:10]), file=sys.stderr)
+                print("min weights for" + l + ":" + str(sorted(label_weights, key=label_weights.get)[:10]), file=sys.stderr)
+                print("bias feature for"+ l + ":" + str(label_weights['***bias_term***']),file=sys.stderr)
                                     
 
     def score(self, doc, label):
@@ -127,14 +127,15 @@ class Perceptron:
 
     def test_eval(self, test_docs, test_labels):
         pred_labels = [self.predict(d) for d in test_docs]
-        confusion_matrix = confusion_matrix(test_labels, pred_labels, labels = self.CLASSES)
-        print(confusion_matrix, file=sys.stderr)
+        cm = confusion_matrix(test_labels, pred_labels, labels = self.CLASSES)
+        # I used the sklearn package, which makes building confusion matices similar to R
+        print(cm, file=sys.stderr)
         for l in range(len(self.CLASSES)):
-            tp = confusion_matrix[l][l]
-            tp_fn = sum(confusion_matrix[l])
+            tp = cm[l][l]
+            tp_fn = sum(cm[l])
             tp_fp = 0
-            for i in range(len(self.CLASSES)):
-                tp_fp += confusion_matrix[i][l]
+            for i in range(len(self.CLASSES)): # i can't select column from array so I have to loop
+                tp_fp += cm[i][l]
             precision = np.divide(tp,tp_fp)
             recall = np.divide(tp,tp_fn)
             f1 = np.divide(2*precision*recall, precision+recall)
